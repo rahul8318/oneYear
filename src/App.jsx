@@ -10,7 +10,7 @@ import PromisesList from './components/PromisesList'
 import MuskanPromises from './components/MuskanPromises'
 import SpecialLetter from './components/SpecialLetter'
 import MusicPlayer from './components/MusicPlayer'
-import { triggerConfetti, triggerHearts } from './utils/effects'
+import { triggerConfetti, triggerHearts, triggerSkyFirecracker } from './utils/effects'
 
 export default function App() {
   const [loading, setLoading] = useState(true)
@@ -20,8 +20,19 @@ export default function App() {
     triggerHearts(e.clientX, e.clientY)
   }
 
+  const handleScreenTap = (e) => {
+    triggerSkyFirecracker(e.clientX, e.clientY)
+  }
+
   return (
-    <div className="min-h-screen bg-[#0f0f1a]">
+    <div
+      className="min-h-screen bg-[#0f0f1a]"
+      onClick={handleScreenTap}
+      onTouchStart={(e) => {
+        const touch = e.touches[0]
+        triggerSkyFirecracker(touch.clientX, touch.clientY)
+      }}
+    >
       <AnimatePresence mode="wait">
         {loading && (
           <LoadingScreen key="loading" onComplete={() => setLoading(false)} />
