@@ -33,15 +33,17 @@ export function triggerConfetti(x, y) {
 }
 
 export function triggerHearts(x, y) {
+  const colors = ['#f472b6', '#e879f9', '#a78bfa', '#60a5fa', '#34d399', '#fbbf24', '#f8b5b2', '#fecaca']
   const heartCount = 15
 
   for (let i = 0; i < heartCount; i++) {
-    const heart = createHeartElement()
+    const size = Math.random() * 20 + 15
+    const color = colors[Math.floor(Math.random() * colors.length)]
+    const heart = createHeartElement(size, color)
     heart.style.cssText = `
       position: fixed;
       left: ${x + (Math.random() - 0.5) * 100}px;
       top: ${y}px;
-      font-size: ${Math.random() * 20 + 15}px;
       pointer-events: none;
       z-index: 9999;
       transition: all 1.5s ease-out;
@@ -66,18 +68,17 @@ export function triggerSkyFirecracker(x, y) {
   const totalHearts = 80
 
   for (let i = 0; i < totalHearts; i++) {
-    const heart = createHeartElement()
     const size = Math.random() * 18 + 10
+    const color = colors[Math.floor(Math.random() * colors.length)]
+    const heart = createHeartElement(size, color)
     heart.style.cssText = `
       position: fixed;
       left: ${x}px;
       top: ${y}px;
-      font-size: ${size}px;
       pointer-events: none;
       z-index: 9999;
       transition: all 1.8s cubic-bezier(0.25, 0.8, 0.25, 1);
     `
-    heart.style.color = colors[Math.floor(Math.random() * colors.length)]
     document.body.appendChild(heart)
 
     const { tx, ty } = getRandomHeartPosition(heartSize)
@@ -91,9 +92,13 @@ export function triggerSkyFirecracker(x, y) {
   }
 }
 
-function createHeartElement() {
+function createHeartElement(size, color) {
+  const s = Math.round(size)
   const heart = document.createElement('div')
-  heart.innerHTML = '\u2764\uFE0F'
+  heart.innerHTML =
+    '<svg width="' + s + '" height="' + s + '" viewBox="0 0 32 29.6" fill="' + color + '">' +
+    '<path d="M23.6 0c-2.4 0-4.4 1.2-5.6 3.1C16.8 1.2 14.8 0 12.4 0 8.4 0 5.2 3.2 5.2 7.2c0 3.3 2.2 5.9 4.7 7.5l7.1 5.8 7.1-5.8c2.5-1.6 4.7-4.2 4.7-7.5C29.2 3.2 26 0 23.6 0z"/>' +
+    '</svg>'
   return heart
 }
 
