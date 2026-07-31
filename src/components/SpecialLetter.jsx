@@ -63,6 +63,16 @@ export default function SpecialLetter() {
                 transition={{ duration: 0.6 }}
                 className="glass-card p-5 md:p-7 text-left"
               >
+                <div className="text-center mb-3 md:mb-4">
+                  <motion.span
+                    className="font-dancing text-2xl md:text-3xl text-pink-300 gradient-text block"
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.2 }}
+                  >
+                    Happy Friendship Day
+                  </motion.span>
+                </div>
                 <h3 className="font-dancing text-xl md:text-2xl text-pink-300 mb-3">Dear Muskan â¤ï¸</h3>
                 <div className="text-gray-300 space-y-2 md:space-y-3 leading-relaxed text-xs md:text-sm">
                   <p>

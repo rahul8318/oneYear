@@ -6,6 +6,8 @@ import FriendshipTimeline from './components/FriendshipTimeline'
 import ReasonsCards from './components/ReasonsCards'
 import FriendshipQuotes from './components/FriendshipQuotes'
 import MemoryWall from './components/MemoryWall'
+import PromisesList from './components/PromisesList'
+import MuskanPromises from './components/MuskanPromises'
 import SpecialLetter from './components/SpecialLetter'
 import MusicPlayer from './components/MusicPlayer'
 import { triggerConfetti, triggerHearts } from './utils/effects'
@@ -37,6 +39,8 @@ export default function App() {
           <ReasonsCards />
           <FriendshipQuotes />
           <MemoryWall />
+          <PromisesList />
+          <MuskanPromises />
           <SpecialLetter />
           <MusicPlayer />
 
