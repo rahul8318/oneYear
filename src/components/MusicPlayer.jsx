@@ -74,7 +74,7 @@ export default function MusicPlayer() {
 
       <div className="flex items-center gap-2 mb-2">
         <div className="w-8 h-8 rounded-md bg-gradient-to-br from-pink-500 to-purple-600 flex items-center justify-center flex-shrink-0">
-          <span className="text-xs">â�ª</span>
+          <span className="text-xs">{'\u266A'}</span>
         </div>
         <div className="min-w-0 flex-1">
           <p className="text-white font-medium text-[10px] truncate">{play[currentTrack].title}</p>

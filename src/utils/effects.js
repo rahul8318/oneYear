@@ -36,8 +36,7 @@ export function triggerHearts(x, y) {
   const heartCount = 15
 
   for (let i = 0; i < heartCount; i++) {
-    const heart = document.createElement('div')
-    heart.innerHTML = 'â¤ï¸'
+    const heart = createHeartElement()
     heart.style.cssText = `
       position: fixed;
       left: ${x + (Math.random() - 0.5) * 100}px;
@@ -67,8 +66,7 @@ export function triggerSkyFirecracker(x, y) {
   const totalHearts = 80
 
   for (let i = 0; i < totalHearts; i++) {
-    const heart = document.createElement('div')
-    heart.innerHTML = 'â¤ï¸'
+    const heart = createHeartElement()
     const size = Math.random() * 18 + 10
     heart.style.cssText = `
       position: fixed;
@@ -91,6 +89,12 @@ export function triggerSkyFirecracker(x, y) {
 
     setTimeout(() => heart.remove(), 2000)
   }
+}
+
+function createHeartElement() {
+  const heart = document.createElement('div')
+  heart.innerHTML = '\u2764\uFE0F'
+  return heart
 }
 
 function getRandomHeartPosition(size) {
