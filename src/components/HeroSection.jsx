@@ -114,7 +114,7 @@ export default function HeroSection() {
             animate={{ scale: [1, 1.05, 1] }}
             transition={{ repeat: Infinity, duration: 3 }}
           >
-            Muskan
+            Minty Muskan
             <motion.span
               animate={{ scale: [1, 1.3, 1], rotate: [0, 15, -15, 0] }}
               transition={{ repeat: Infinity, duration: 2 }}
