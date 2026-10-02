@@ -140,7 +140,7 @@ export const wallCards = [
     kind: 'note',
     text: 'you are the plan. everything else is just extra.',
     className:
-      'lg:left-[48%] lg:top-[66%] lg:rotate-[3deg] lg:w-[32%] lg:max-w-[210px]',
+      'lg:left-[28%] lg:top-[68%] lg:rotate-[3deg] lg:w-[32%] lg:max-w-[210px]',
   },
   {
     kind: 'photo',
@@ -149,7 +149,7 @@ export const wallCards = [
     caption: 'and a million more to come.',
     ratio: 'aspect-[4/5]',
     className:
-      'lg:left-[34%] lg:top-[72%] lg:rotate-[5deg] lg:w-[38%] lg:max-w-[230px]',
+      'lg:left-[64%] lg:top-[70%] lg:rotate-[5deg] lg:w-[38%] lg:max-w-[230px]',
   },
 ]
 

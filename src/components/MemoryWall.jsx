@@ -37,7 +37,7 @@ export default function MemoryWall() {
         subtitle="Scattered on purpose. Tap any photo to see it properly."
         className="overflow-hidden"
       >
-        <div className="relative mx-auto grid max-w-3xl grid-cols-1 items-start gap-x-6 gap-y-12 sm:grid-cols-2 lg:h-[1080px] lg:max-w-6xl lg:grid-cols-none lg:gap-0">
+        <div className="relative mx-auto grid max-w-3xl grid-cols-1 items-start gap-x-6 gap-y-12 sm:grid-cols-2 md:[&>*:nth-child(even)]:mt-10 lg:h-[1180px] lg:max-w-6xl lg:grid-cols-none lg:gap-0 lg:[&>*:nth-child(even)]:mt-0">
           {wallCards.map((card, i) => {
             const tilt = tilts[i % tilts.length]
             return (
@@ -47,7 +47,7 @@ export default function MemoryWall() {
                 whileInView={{ opacity: 1, y: 0, scale: 1 }}
                 viewport={{ once: true, amount: 0.2 }}
                 transition={{ duration: 0.9, delay: (i % 4) * 0.08, ease: EASE }}
-                className={`relative mx-auto w-full max-w-[290px] sm:max-w-[330px] lg:absolute lg:mx-0 lg:max-w-none ${card.className}`}
+                className={`relative mx-auto w-full max-w-[290px] sm:max-w-[320px] md:max-w-[300px] lg:absolute lg:mx-0 ${card.className}`}
               >
                 <motion.div
                   animate={
