@@ -1,69 +1,61 @@
-import { useState } from 'react'
-import { AnimatePresence, motion } from 'framer-motion'
-import LoadingScreen from './components/LoadingScreen'
-import HeroSection from './components/HeroSection'
-import FriendshipTimeline from './components/FriendshipTimeline'
-import ReasonsCards from './components/ReasonsCards'
-import FriendshipQuotes from './components/FriendshipQuotes'
+import { useEffect, useState } from 'react'
+import { AnimatePresence, MotionConfig, motion } from 'framer-motion'
+import OpeningScreen from './components/OpeningScreen'
+import Hero from './components/Hero'
+import TimeCounter from './components/TimeCounter'
+import MemoriesGallery from './components/MemoriesGallery'
+import TimelineChapter from './components/TimelineChapter'
+import LoveCards from './components/LoveCards'
 import MemoryWall from './components/MemoryWall'
-import PromisesList from './components/PromisesList'
-import MuskanPromises from './components/MuskanPromises'
-import SpecialLetter from './components/SpecialLetter'
-import MusicPlayer from './components/MusicPlayer'
-import { triggerConfetti, triggerHearts, triggerSkyFirecracker } from './utils/effects'
+import Letter from './components/Letter'
+import FinalPhoto from './components/FinalPhoto'
+import FinalScreen from './components/FinalScreen'
+import MusicDock from './components/MusicDock'
+import ScrollProgress from './components/ScrollProgress'
+import CursorGlow from './components/CursorGlow'
+
+const EASE = [0.16, 1, 0.3, 1]
 
 export default function App() {
-  const [loading, setLoading] = useState(true)
+  const [entered, setEntered] = useState(false)
 
-  const handleButtonClick = (e) => {
-    triggerConfetti(e.clientX, e.clientY)
-    triggerHearts(e.clientX, e.clientY)
-  }
+  useEffect(() => {
+    document.body.classList.toggle('is-locked', !entered)
+    return () => document.body.classList.remove('is-locked')
+  }, [entered])
 
-  const handleScreenTap = (e) => {
-    triggerSkyFirecracker(e.clientX, e.clientY)
-  }
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [entered])
 
   return (
-    <div
-      className="min-h-screen bg-[#0f0f1a]"
-      onClick={handleScreenTap}
-      onTouchStart={(e) => {
-        const touch = e.touches[0]
-        triggerSkyFirecracker(touch.clientX, touch.clientY)
-      }}
-    >
-      <AnimatePresence mode="wait">
-        {loading && (
-          <LoadingScreen key="loading" onComplete={() => setLoading(false)} />
-        )}
+    <MotionConfig reducedMotion="user">
+      <AnimatePresence>
+        {!entered && <OpeningScreen key="opening" onEnter={() => setEntered(true)} />}
       </AnimatePresence>
 
-      {!loading && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1 }}
-        >
-          <HeroSection />
-          <FriendshipTimeline />
-          <ReasonsCards />
-          <FriendshipQuotes />
-          <MemoryWall />
-          <PromisesList />
-          <MuskanPromises />
-          <SpecialLetter />
-          <MusicPlayer />
+      <ScrollProgress />
+      <CursorGlow />
 
-          <button
-            onClick={handleButtonClick}
-            className="fixed bottom-6 left-6 z-40 w-14 h-14 rounded-full bg-gradient-to-r from-pink-500 to-rose-600 flex items-center justify-center text-white shadow-2xl shadow-pink-500/40 hover:shadow-pink-500/60 transition-all duration-300"
-            title="Spread Love"
-          >
-            🎉
-          </button>
-        </motion.div>
+      {entered && (
+        <motion.main
+          initial={{ opacity: 0, scale: 1.025 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 1.3, ease: EASE }}
+          className="relative"
+        >
+          <Hero />
+          <TimeCounter />
+          <MemoriesGallery />
+          <TimelineChapter />
+          <LoveCards />
+          <MemoryWall />
+          <Letter />
+          <FinalPhoto />
+          <FinalScreen />
+          <MusicDock />
+        </motion.main>
       )}
-    </div>
+    </MotionConfig>
   )
 }

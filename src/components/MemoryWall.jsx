@@ -1,64 +1,106 @@
-import { motion } from 'framer-motion'
-import memories from '../data/memories'
-import { FaStickyNote } from 'react-icons/fa'
+import { useCallback, useMemo, useState } from 'react'
+import { motion, useReducedMotion } from 'framer-motion'
+import Section from './ui/Section'
+import Lightbox from './ui/Lightbox'
+import { wallCards } from '../data/site'
 
-const noteColors = [
-  'bg-yellow-200/90 text-yellow-900',
-  'bg-pink-200/90 text-pink-900',
-  'bg-green-200/90 text-green-900',
-  'bg-blue-200/90 text-blue-900',
-  'bg-purple-200/90 text-purple-900',
-  'bg-orange-200/90 text-orange-900',
-  'bg-teal-200/90 text-teal-900',
-  'bg-red-200/90 text-red-900',
-  'bg-indigo-200/90 text-indigo-900',
-  'bg-cyan-200/90 text-cyan-900',
-  'bg-lime-200/90 text-lime-900',
-  'bg-rose-200/90 text-rose-900',
-]
+const EASE = [0.16, 1, 0.3, 1]
+
+const tilts = [0, -6, 7, 3, -4, 6, 2]
 
 export default function MemoryWall() {
+  const reduced = useReducedMotion()
+  const [activeIndex, setActiveIndex] = useState(null)
+
+  const photos = useMemo(
+    () =>
+      wallCards
+        .map((card, i) => ({ ...card, index: i }))
+        .filter((card) => card.kind === 'photo'),
+    [],
+  )
+
+  const openAt = useCallback(
+    (wallIndex) => {
+      const photoIndex = photos.findIndex((p) => p.index === wallIndex)
+      if (photoIndex >= 0) setActiveIndex(photoIndex)
+    },
+    [photos],
+  )
+
   return (
-    <section className="py-20 px-4 relative">
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-purple-900/10 to-transparent" />
-
-      <div className="max-w-6xl mx-auto relative">
-        <motion.h2
-          className="font-dancing text-5xl md:text-6xl text-center mb-4 gradient-text"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-        >
-          Memory Wall
-        </motion.h2>
-        <p className="text-center text-gray-400 mb-16 text-lg">Our friendship, one note at a time</p>
-
-        <div className="columns-1 sm:columns-2 md:columns-3 lg:columns-4 gap-6 space-y-6">
-          {memories.map((memory, index) => {
-            const rotation = (Math.random() - 0.5) * 8
-            const color = noteColors[index % noteColors.length]
-
+    <>
+      <Section
+        id="wall"
+        eyebrow="memory wall"
+        title="A few pieces of my favourite year."
+        subtitle="Scattered on purpose. Tap any photo to see it properly."
+        className="overflow-hidden"
+      >
+        <div className="relative mx-auto grid max-w-3xl grid-cols-1 items-start gap-x-6 gap-y-12 sm:grid-cols-2 lg:h-[1080px] lg:max-w-6xl lg:grid-cols-none lg:gap-0">
+          {wallCards.map((card, i) => {
+            const tilt = tilts[i % tilts.length]
             return (
               <motion.div
-                key={memory.id}
-                className={`break-inside-avoid p-5 rounded-xl shadow-lg ${color} transform`}
-                style={{ transform: `rotate(${rotation}deg)` }}
-                initial={{ opacity: 0, scale: 0.5, rotate: rotation - 10 }}
-                whileInView={{ opacity: 1, scale: 1, rotate: rotation }}
-                viewport={{ once: true }}
-                transition={{ type: 'spring', stiffness: 100, delay: index * 0.1 }}
-                whileHover={{ scale: 1.05, rotate: 0, zIndex: 10 }}
+                key={i}
+                initial={reduced ? false : { opacity: 0, y: 46, scale: 0.96 }}
+                whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                viewport={{ once: true, amount: 0.2 }}
+                transition={{ duration: 0.9, delay: (i % 4) * 0.08, ease: EASE }}
+                className={`relative mx-auto w-full max-w-[290px] sm:max-w-[330px] lg:absolute lg:mx-0 lg:max-w-none ${card.className}`}
               >
-                <div className="flex items-start gap-3">
-                  <span className="text-3xl">{memory.emoji}</span>
-                  <p className="font-medium leading-snug">{memory.text}</p>
-                </div>
-                <FaStickyNote className="absolute top-2 right-3 opacity-10 text-4xl" />
+                <motion.div
+                  animate={
+                    reduced
+                      ? undefined
+                      : { y: [0, -9, 0], rotate: [tilt, tilt + 0.8, tilt] }
+                  }
+                  transition={{
+                    duration: 8 + (i % 4),
+                    repeat: Infinity,
+                    ease: 'easeInOut',
+                    delay: i * 0.35,
+                  }}
+                  whileHover={reduced ? undefined : { scale: 1.03, y: -6 }}
+                >
+                  {card.kind === 'photo' ? (
+                    <button
+                      type="button"
+                      onClick={() => openAt(i)}
+                      className="group block w-full overflow-hidden rounded-[1.3rem] bg-ink-700 text-left shadow-[0_28px_70px_-34px_rgba(0,0,0,0.95)] ring-1 ring-white/10 transition-shadow duration-500 hover:shadow-[0_34px_90px_-30px_rgba(255,107,138,0.5)]"
+                    >
+                      <img
+                        src={card.src}
+                        alt={card.alt}
+                        loading="lazy"
+                        decoding="async"
+                        draggable={false}
+                        className={`w-full object-cover transition-transform duration-[900ms] ease-out group-hover:scale-[1.07] ${card.ratio}`}
+                      />
+                      <span className="block px-4 py-3 font-script text-lg text-cream/90">
+                        {card.caption}
+                      </span>
+                    </button>
+                  ) : (
+                    <div className="rounded-[1.3rem] bg-cream px-6 py-7 text-ink-900 shadow-[0_28px_70px_-34px_rgba(0,0,0,0.95)] ring-1 ring-white/20">
+                      <p className="font-script text-xl leading-snug sm:text-2xl">
+                        {card.text}
+                      </p>
+                    </div>
+                  )}
+                </motion.div>
               </motion.div>
             )
           })}
         </div>
-      </div>
-    </section>
+      </Section>
+
+      <Lightbox
+        items={photos.map(({ src, alt, caption }) => ({ src, alt, caption }))}
+        index={activeIndex}
+        onClose={() => setActiveIndex(null)}
+        onIndexChange={setActiveIndex}
+      />
+    </>
   )
 }
